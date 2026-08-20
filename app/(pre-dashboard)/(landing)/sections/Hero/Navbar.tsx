@@ -125,7 +125,7 @@ function Navbar() {
         <Image
           width={200}
           height={200}
-          src="/landing/F2025/HackRU-logo-f25.png"
+          src="/landing/F2026/hackru-logo-f26.png"
           alt="generic hackru logo"
         />
       </div>

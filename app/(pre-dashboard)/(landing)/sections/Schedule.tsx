@@ -8,7 +8,7 @@ function ScheduleOfTheDay(props: { dayInfo: DayInfo }) {
   const { dayInfo } = props;
   const { day, times } = dayInfo;
   return (
-    <div className="my-5 flex w-full flex-col text-white">
+    <div className="relative z-10 my-5 flex w-full flex-col text-[#2F4F2F]">
       <div className="glow-subtitles text-textSubtitle mb-4 w-full text-center text-xl font-semibold md:text-5xl">
         {dayInfo.day}
       </div>
@@ -18,12 +18,12 @@ function ScheduleOfTheDay(props: { dayInfo: DayInfo }) {
             className="mt-4 flex w-full flex-row pr-4 text-xl md:my-6 md:px-3"
             key={`${day}-${index}`}
           >
-            <div className="text-white-100 h-fit w-1/3 pr-4 text-right font-black">
+            <div className="h-fit w-1/3 pr-4 text-right font-black text-[#7B241C]">
               {timeInfo.time}
             </div>
-            <div className="flex w-2/3 flex-col pl-6 border-l border-gray-600">
+            <div className="flex w-2/3 flex-col border-l border-[#8FA37B] pl-6">
               <div className="text-lg font-semibold">{timeInfo.event}</div>
-              <div className="text-sm text-gray-300">{timeInfo.location}</div>
+              <div className="text-sm text-[#5A6B4A]">{timeInfo.location}</div>
             </div>
           </div>
         ))}
@@ -119,10 +119,32 @@ export default function Schedule() {
       id="Schedule"
     >
       <div className="flex h-fit w-full max-w-7xl flex-col items-center ">
-        <div
-          className="text-text relative flex w-full flex-col items-center bg-gray-900/80 backdrop-blur-sm
-p-8 md:p-12 rounded-2xl shadow-2xl border border-gray-700/50 md:flex-row md:items-start "
-        >
+        <div className="text-text relative flex w-full flex-col items-center bg-[#F7F3D7]/95 px-14 pb-24 pt-36 md:flex-row md:items-start md:px-28 md:pb-32 md:pt-44">
+          {/* F2026 vine frame.
+              MEASURED, not guessed: the PNG is 1440x1112 but the painted frame
+              only occupies the opaque box x=203..1197, y=169..909 - roughly a
+              200px transparent margin on every side. Rendering it at inset-0
+              would therefore draw the frame ~20% inside the card.
+              So the image is scaled up and offset so its OPAQUE box lands on
+              the card's edges:
+                width  1440/994  = 144.9%   left -203/994  = -20.4%
+                height 1112/740  = 150.3%   top  -169/740  = -22.8%
+              border-image was tried first and rejected: the frame is hand-drawn
+              and skewed (left bar is 4px thick at mid-height vs 43px at top),
+              so a rectilinear 9-slice cannot represent it. */}
+          <img
+            src="/landing/F2026/schedule-frame.png"
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none absolute select-none"
+            style={{
+              width: '144.9%',
+              height: '150.3%',
+              left: '-20.4%',
+              top: '-22.8%',
+              maxWidth: 'none',
+            }}
+          />
           <ScheduleOfTheDay dayInfo={schedule['Saturday']} />
           <div className="bg-text h-2 w-20 rounded-sm md:invisible md:absolute" />
           <div className="flex w-full flex-col items-center">
@@ -152,14 +174,6 @@ p-8 md:p-12 rounded-2xl shadow-2xl border border-gray-700/50 md:flex-row md:item
           quality={50}
         /> */}
 
-      <Image
-        src={'/landing/F2025/mini dragons/mini 5.png'}
-        width="500"
-        height="500"
-        className="absolute -bottom-[100px] right-[10px] w-[250px] md:right-[50px] md:w-[400px] lg:-bottom-[150px]"
-        alt={'cool'}
-        quality={50}
-      />
 
       <Transition appear show={mapOpen} as={Fragment}>
         <Dialog

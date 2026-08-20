@@ -16,7 +16,7 @@ function AboutInfo({
 }: {
   children: React.ReactNode;
   title: string;
-  imageSrc: string;
+  imageSrc?: string;
   alt: string;
   reverse?: boolean;
   titleColor: string;
@@ -29,7 +29,8 @@ function AboutInfo({
     return (
       <div
         className={clsx(
-          'relative z-10 h-fit w-full p-5 md:w-1/2 md:grow md:justify-end md:p-20',
+          'relative z-10 h-fit w-full p-5 md:grow md:justify-end md:p-20',
+          imageSrc ? 'md:w-1/2' : 'mx-auto md:w-full md:max-w-4xl text-center',
           {
             'text-end': reverse,
           },
@@ -51,11 +52,18 @@ function AboutInfo({
           }}
         />
         
-        <h1
-          className={clsx('relative z-20 text-3xl md:text-5xl', azeret.className)}
-          style={{ color: titleColor }}
-        >
-          {title}
+        {/* F2026: the mockup renders each section title as a red pill badge
+            rather than plain text. Inline-block + rounded-full + red ground. */}
+        <h1 className="relative z-20 flex justify-center">
+          <span
+            className={clsx(
+              'inline-block rounded-full bg-[#C0392B] px-8 py-2',
+              'text-2xl text-white shadow-[0_3px_0_#7B241C] md:text-4xl',
+              azeret.className,
+            )}
+          >
+            {title}
+          </span>
         </h1>
         <div className={clsx('relative z-20 text-2xl', azeretMono.className)}>{children}</div>
       </div>
@@ -63,6 +71,9 @@ function AboutInfo({
   }
 
   function AboutImage() {
+    // F2026: no decorative side art in the design, so this renders nothing.
+    // Guard also protects next/image, which throws on an undefined src.
+    if (!imageSrc) return null;
     return (
       <div
         className={clsx('z-10 flex h-fit w-full justify-center md:w-1/2', {
@@ -119,7 +130,7 @@ export default function About() {
           ABOUT
         </p>
         <Image
-          src={'/landing/F2025/header1.png'}
+          src={'/landing/F2026/ribbon-pink.png'}
           width="300"
           height="300"
           className="w-[400px]"
@@ -137,7 +148,6 @@ export default function About() {
       >
         <AboutInfo
           title="WHAT"
-          imageSrc="/landing/F2025/HourglassAsset.png"
           alt="Python"
           reverse
           titleColor="s2025black"
@@ -175,7 +185,6 @@ export default function About() {
 
         <AboutInfo
           title="TRACKS"
-          imageSrc="/landing/F2025/pocket_watch_f25.png"
           alt="Python"
           titleColor="s2025black"
         >
@@ -216,7 +225,6 @@ export default function About() {
 
         <AboutInfo
           title="JOIN US"
-          imageSrc="/landing/F2025/key-and-lock.PNG"
           alt="Python"
           reverse
           titleColor="s2025black"
@@ -224,11 +232,11 @@ export default function About() {
           <div className="border-t-8 border-cyan-100 pb-6 pt-6 text-white">
             <p className="inline  ">Apply</p>
             <p className="inline"> to attend our </p>
-            <p className="inline   ">Fall 2025 HackRU!</p>
+            <p className="inline   ">Fall 2026 HackRU!</p>
             <p className="inline"> The event will be on</p>
-            <p className="inline   "> October 4th - 5th</p>
+            <p className="inline   "> October 10th - 11th</p>
             <p className="inline"> at</p>
-            <p className="inline   "> College Ave Student Center!</p>
+            <p className="inline   "> Busch Student Center!</p>
           </div>
 
           <div className="pb-6 text-white">
