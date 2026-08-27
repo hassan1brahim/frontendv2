@@ -19,7 +19,7 @@ const LugeReact = () => {
         luge.lifecycle.refresh();
       })
       .catch((error) => console.error(error));
-  });
+  }, []);
 
   return null;
 };
