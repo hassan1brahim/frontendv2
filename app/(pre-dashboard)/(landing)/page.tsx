@@ -15,12 +15,7 @@ import GenericSection from './sections/GenericSection';
 import { getSponsors } from '@/app/lib/data';
 import React from 'react';
 
-import { redirect } from 'next/navigation';
-
 export default async function Page() {
-  // comment this out to preview the F2026 landing locally
-  redirect('/offseason');
-
   return (
     <main
       className={`f2026-landing-page relative flex h-fit flex-col ${fredoka.className} text-s2025black-100`}
