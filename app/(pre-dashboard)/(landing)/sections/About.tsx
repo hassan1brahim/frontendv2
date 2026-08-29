@@ -218,11 +218,11 @@ export default function About() {
               styling both the same made three of these look clickable. */}
           <div className="space-y-6 text-white/90">
             <p>
-              Apply to attend our{' '}
+              Register to attend our{' '}
               <Link href="/signup" className={LINK}>
                 Fall 2026 HackRU!
               </Link>{' '}
-              The event will be on October 10-11 at the Busch Student Center.
+              The hackathon will be held on October 10-11 at the Busch Student Center.
             </p>
             <p>
               Want to help?{' '}
