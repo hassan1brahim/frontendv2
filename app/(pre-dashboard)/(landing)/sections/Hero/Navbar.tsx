@@ -1,17 +1,22 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdOutlineMenu } from 'react-icons/md';
 import { Fragment } from 'react';
 import { redirect, usePathname, useRouter } from 'next/navigation';
 import { Menu, Transition } from '@headlessui/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { bizUdg } from '@/app/ui/fonts';
-import { longCang, azeret } from '@/app/ui/fonts';
+import { fredoka } from '@/app/ui/fonts';
 import clsx from 'clsx';
 
 function scrollToSectionName(sectionName: string) {
+  // Home is the top of the page, not a section - the only id="Home" is in
+  // Hero.tsx and the F2026 landing renders Hero2
+  if (sectionName === 'Home') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
   const section = document.getElementById(sectionName);
   if (section) {
     section.scrollIntoView({ behavior: 'smooth' });
@@ -90,7 +95,7 @@ function CollapsedMenu() {
               <MenuItem sectionName="About" />
               <MenuItem sectionName="Schedule" />
               <MenuItem sectionName="FAQ" />
-              <MenuItem sectionName="Team" />
+              {/* no Team entry - those sections are commented out in page.tsx */}
               {/* <MenuItem sectionName="Sponsors" /> */}
               {<OtherPageMenuItem sectionName="Contact" />}
             </div>
@@ -109,14 +114,37 @@ function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const isHomePage = pathname === '/';
-  const sections = ['About', 'Schedule', 'FAQ'];
+  const sections = ['Home', 'About', 'Schedule', 'FAQ'];
+
+  // the nav is fixed and its links are white, which is 1.26:1 on the pale
+  // ground below the hero. This fades a dark plate in once you scroll past it.
+  const [pastHero, setPastHero] = useState(false);
+  useEffect(() => {
+    const onScroll = () =>
+      setPastHero(window.scrollY > window.innerHeight * 0.9);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <div
       className={`z-40 flex w-full justify-end
-        md:fixed ${azeret.className}`}
+        md:fixed ${fredoka.className}`}
       id="navbar"
     >
+      {/* pointer-events-none so it never swallows a nav click */}
+      <div
+        aria-hidden="true"
+        className={clsx(
+          'pointer-events-none absolute inset-x-0 top-0 hidden h-28 transition-opacity duration-300 lg:block',
+          pastHero ? 'opacity-100' : 'opacity-0',
+        )}
+        style={{
+          backgroundImage:
+            'linear-gradient(to bottom, rgba(20,34,16,0.72) 0%, rgba(20,34,16,0.45) 55%, rgba(20,34,16,0) 100%)',
+        }}
+      />
       <div
         style={{ left: '5%', top: '24px' }}
         className="hover:drop-shadow-inner absolute z-50 w-24 hover:scale-105 sm:w-24 md:w-36 lg:w-36 "
@@ -125,62 +153,38 @@ function Navbar() {
         <Image
           width={200}
           height={200}
-          src="/landing/F2025/HackRU-logo-f25.png"
+          src="/landing/F2026/hackru-logo-f26.png"
           alt="generic hackru logo"
         />
       </div>
 
-      <a
-        href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=yellow"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="absolute right-2 top-0 z-50 w-12 sm:w-16 md:w-20 lg:w-24"
-      >
-        <Image
-          width={100}
-          height={100}
-          src="https://s3.amazonaws.com/logged-assets/trust-badge/2026/mlh-trust-badge-2026-yellow.svg"
-          alt="Major League Hacking 2026 Hackathon Season"
-        />
-      </a>
       <CollapsedMenu />
       <div
-        className="absolute right-20 top-0 z-40 hidden w-full bg-gradient-to-b from-gray-300
+        className="absolute right-20 top-0 z-40 hidden w-full
         justify-end pr-2 pt-4 text-sm font-light text-dark_red-100 sm:pr-4 sm:pt-6 sm:text-base md:pr-6 md:pt-8 md:text-lg lg:flex lg:pr-8 lg:pt-10 lg:text-xl"
       >
         {isHomePage && (
-          <div className="relative flex items-center justify-start">
+          <div className="relative flex items-center justify-start gap-8 md:gap-12 lg:gap-16">
             {sections.map((section) => (
               <button
                 style={{
-                  color: 'darkcyan',
-                  textTransform: 'lowercase',
+                  color: 'white',
+                  textTransform: 'none',
                 }}
-                className="glow-center ms-4 text-lg font-medium uppercase transition-shadow hover:drop-shadow-blueGlow sm:mr-3 sm:text-xl md:mr-4 md:text-2xl lg:mr-5 lg:text-3xl"
+                className="glow-center whitespace-nowrap text-sm font-semibold transition-transform [text-shadow:0_2px_6px_rgba(0,0,0,0.65)] hover:scale-105 md:text-base lg:text-lg"
                 onClick={() => scrollToSectionName(section)}
                 key={section}
               >
                 {section}
               </button>
             ))}
-            <button
-              style={{
-                color: 'darkcyan',
-                textTransform: 'lowercase',
-              }}
-              className="glow-center ms-4 text-lg font-medium uppercase transition-shadow hover:drop-shadow-blueGlow sm:mr-3 sm:text-xl md:mr-4 md:text-2xl lg:mr-5 lg:text-3xl"
-              onClick={() => router.push('/leaderboard')}
-            >
-              Leaderboard
-            </button>
-
             <Link href="https://linktr.ee/thehackru">
               <button
                 style={{
-                  color: 'darkcyan',
-                  textTransform: 'lowercase',
+                  color: 'white',
+                  textTransform: 'none',
                 }}
-                className="glow-center ms-4 text-lg font-medium uppercase transition-shadow hover:drop-shadow-blueGlow sm:mr-3 sm:text-xl md:mr-4 md:text-2xl lg:mr-5 lg:text-3xl"
+                className="glow-center whitespace-nowrap text-sm font-semibold transition-transform [text-shadow:0_2px_6px_rgba(0,0,0,0.65)] hover:scale-105 md:text-base lg:text-lg"
               >
                 Contact
               </button>
